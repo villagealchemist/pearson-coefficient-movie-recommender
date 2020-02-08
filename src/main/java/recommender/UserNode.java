@@ -101,4 +101,5 @@ public class UserNode {
         return movieRatings.computeSimilarity(otherUser.movieRatings);
     }
 
+
 }
