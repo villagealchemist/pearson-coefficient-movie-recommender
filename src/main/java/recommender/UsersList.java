@@ -20,19 +20,46 @@ public class UsersList {
      * @param rating  rating given by this user to this movie
      */
     public void insert(int userId, int movieId, double rating) {
+        UserNode current = head;
+
+
+        if (head == null){
+            UserNode newUser = new UserNode(movieId);
+            head = newUser;
+            tail = head;
+            newUser.insert(movieId, rating);
+        }else {
+            while (current != null) {
+                if (current.getId() == userId) {
+                    current.insert(movieId, rating);
+                    break;
+                } else {
+                    current = current.next();
+                }
+            }
+        }
+        if (current == null){
+                UserNode newUser = new UserNode(userId);
+                append(newUser);
+                newUser.insert(movieId, rating);
+            }
+        }
 
         // Check if recommender.UserNode already exists;
         // if not, create it and append to this list.
         // Then call insert(movieId, rating) method on the recommender.UserNode
         // FILL IN CODE
 
-    }
+
 
     /**
      * Append a new node to the list
      * @param newNode a new node to append to the list
      */
     public void append(UserNode newNode) {
+
+        tail.setNext(newNode);
+        tail = newNode;
         // This is where tail will come in handy
         // FILL IN CODE
     }
@@ -43,7 +70,14 @@ public class UsersList {
      * @return recommender.UserNode for a given userId
      */
     public UserNode get(int userId) {
-        // FILL IN CODE
+        UserNode current = head;
+
+        while(current != null){
+            if (current.getId() == userId){
+                return current;
+            }
+            current = current.next();
+        }
 
         return null; // don't forget to change it
     } // get method
@@ -60,9 +94,31 @@ public class UsersList {
      */
     public UserNode findMostSimilarUser(int userid) {
         UserNode mostSimilarUser = null;
-        // FILL IN CODE
+        UserNode current = head;
+        UserNode targetNode = null;
+        double similarity = 0;
 
-
+        while (current != null){
+            if (current.getId() == userid){
+                targetNode = current;
+                current = head;
+                break;
+            }else{
+                current = current.next();
+            }
+        }
+        while (current != null){
+            if(current.getId() == targetNode.getId()){
+                current = current.next();
+            }else if (current.computeSimilarity(targetNode) > similarity){
+                mostSimilarUser = current;
+                similarity = current.computeSimilarity(targetNode);
+                current = current.next();
+            }
+            else {
+                current = current.next();
+            }
+        }
         return mostSimilarUser;
 
     }
