@@ -152,6 +152,42 @@ public class MovieRecommender {
      */
     public void findAntiRecommendations(int userid, int num, String filename) {
 
+        UserNode simUser = usersData.findMostSimilarUser(userid);
+        int[] notFavMovies = simUser.getLeastFavoriteMovies(num);
+
+        UserNode myUser = usersData.get(userid);
+        FileWriter favWriter;
+        try {
+            favWriter = new FileWriter(filename);
+
+        } catch (IOException e) {
+            return;
+        }
+
+        for (int i = 0; i < num; i++) {
+            int currentId = notFavMovies[i];
+
+            if (myUser.getUsersRating(currentId) == 0){
+                if (simUser.getUsersRating(currentId) == 1){
+                    String movieName = movieMap.get(currentId);
+                    try {
+                        favWriter.write(movieName + "\n");
+
+                    }
+                    catch (IOException e){
+                        return;
+                    }
+                }
+            }
+        }
+        try {
+            favWriter.close();
+        }catch (IOException e){
+
+        }
+
+
+
         // compute similarity between userid and all the other users
         // find the most similar user and anti-recommend movies that the most similar
         // user rated as 1.

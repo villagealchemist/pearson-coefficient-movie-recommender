@@ -81,9 +81,7 @@ public class UserNode {
 
         while (it.hasNext()){
             RatingNode current = it.next();
-
             favMovies[i] = current.getMovieId();
-
             i++;
         }
 
@@ -97,9 +95,19 @@ public class UserNode {
      * @return array of movie ids the user rated the lowest
      */
     public int[] getLeastFavoriteMovies(int n) {
-        // FILL IN CODE
+        RatingsList nWorst = movieRatings.getNWorstRankedMovies(n);
+        Iterator<RatingNode> it = nWorst.iterator();
+        int[] notFavMovies = new int[n];
+        int i = 0;
 
-        return null; // don't forget to change
+        while (it.hasNext()){
+            RatingNode current = it.next();
+            notFavMovies[i] = current.getMovieId();
+            i++;
+        }
+
+        return notFavMovies;
+
     }
 
     /**
@@ -126,8 +134,10 @@ public class UserNode {
                 return rating;
             }
         }
-
         return 0.0;
     }
 
+    public RatingsList getMovieRatings() {
+        return movieRatings;
+    }
 }

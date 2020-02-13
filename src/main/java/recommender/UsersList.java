@@ -1,5 +1,9 @@
 package recommender;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Iterator;
+
 /**
  * A custom linked list that stores user info. Each node in the list is of type
  * recommender.UserNode.
@@ -20,7 +24,7 @@ public class UsersList {
      * @param rating  rating given by this user to this movie
      */
     public void insert(int userId, int movieId, double rating) {
-        UserNode current = head;
+
 
 
         if (head == null){
@@ -29,6 +33,7 @@ public class UsersList {
             tail = head;
             newUser.insert(movieId, rating);
         }else {
+            UserNode current = head;
             while (current != null) {
                 if (current.getId() == userId) {
                     current.insert(movieId, rating);
@@ -37,13 +42,13 @@ public class UsersList {
                     current = current.next();
                 }
             }
-        }
-        if (current == null){
+            if (current == null){
                 UserNode newUser = new UserNode(userId);
                 append(newUser);
                 newUser.insert(movieId, rating);
             }
         }
+    }
 
         // Check if recommender.UserNode already exists;
         // if not, create it and append to this list.
@@ -130,7 +135,30 @@ public class UsersList {
      * @param filename name of the file where to output recommender.UsersList info
      */
     public void print(String filename) {
-        // FILL IN CODE
+
+
+        try {
+            UserNode current = head;
+            FileWriter myWriter = new FileWriter(filename);
+
+            while (current != null) {
+                RatingsList usersList = current.getMovieRatings();
+                Iterator<RatingNode> it = usersList.iterator();
+                String userId = Integer.toString(current.getId());
+                myWriter.write("(" +userId+ ") ");
+                while (it.hasNext()) {
+                    RatingNode ratingsCur = it.next();
+                    String id = Integer.toString(ratingsCur.getMovieId());
+                    String rating = Double.toString(ratingsCur.getMovieRating()) ;
+                    myWriter.write(id +":"+ rating+"; ");
+                }
+                myWriter.write("\n");
+                current = current.next();
+            }
+            myWriter.close();
+        }catch (IOException e) {
+            return;
+        }
 
     }
 }
