@@ -33,6 +33,7 @@ public class MovieRecommenderTest {
         } catch (IOException e) {
             Assert.fail(" File check failed: " + e.getMessage());
         }
+
     }
 
     @Test

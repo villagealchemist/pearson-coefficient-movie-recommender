@@ -71,33 +71,23 @@ public class UserNode {
      * movies that this user rated the highest.
      *
      * @param n  number of movies to return
-     * @return array containing movie ids this user rated the highest
+            * @return array containing movie ids this user rated the highest
      */
     public int[] getFavoriteMovies(int n) {
         RatingsList nBest = movieRatings.getNBestRankedMovies(n);
-        RatingNode head = nBest.iterator().next();
-        RatingNode current = head;
+        Iterator<RatingNode> it = nBest.iterator();
         int[] favMovies = new int[n];
+        int i = 0;
 
-        while (nBest.iterator().hasNext()){
-            head.setNext(nBest.iterator().next());
+        while (it.hasNext()){
+            RatingNode current = it.next();
+
+            favMovies[i] = current.getMovieId();
+
+            i++;
         }
 
-        for (int i = 0; i < n; i++){
-            favMovies[i] = (current.getMovieId());
-
-        }
-
-        /* RatingNode current = nBest.head;
-        int[] favorites = new int[n];
-
-        for (int i = 0; i < n; i++){
-            favorites[n] = current.getMovieId();
-            current = current.next();
-        }
-        return favorites; */  //doesn't work beacause head is private
-
-        return favMovies; // don't forget to change
+        return favMovies;
     }
 
     /**
@@ -124,5 +114,20 @@ public class UserNode {
         return movieRatings.computeSimilarity(otherUser.movieRatings);
     }
 
+    public double getUsersRating (int movieId){
+        double rating = 0.0;
+        Iterator<RatingNode> it = movieRatings.iterator();
+
+        while (it.hasNext()){
+
+            RatingNode current = it.next();
+            if (current.getMovieId() == movieId){
+                rating = current.getMovieRating();
+                return rating;
+            }
+        }
+
+        return 0.0;
+    }
 
 }

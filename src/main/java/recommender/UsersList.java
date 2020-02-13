@@ -72,16 +72,15 @@ public class UsersList {
     public UserNode get(int userId) {
         UserNode current = head;
 
-        while(current != null){
-            if (current.getId() == userId){
+        while (current != null) {
+            if (current.getId() == userId) {
                 return current;
             }
             current = current.next();
         }
 
-        return null; // don't forget to change it
-    } // get method
-
+        return null;
+    }
 
     /**
      * The method computes the similarity between the user with the given userid

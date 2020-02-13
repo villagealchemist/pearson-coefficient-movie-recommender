@@ -17,6 +17,18 @@ public class RatingsListTest {
     public static final double[] RATINGS = {5, 5, 2, 5, 4, 3, 4};
 
     @Test
+    public void testInsertByRating2() {
+        int[] movies = {9, 4, 53, 1, 234, 44};
+        double[] ratings = {4.5, 1, 4, 5, 5, 4.5};
+        RatingsList movieRatingsList = initalizeListWithValues(movies, ratings);
+        Assert.assertEquals(numNodes(movieRatingsList), 6);
+
+        boolean listSortedCorrectly = isSortedDescending(movieRatingsList);
+        if (!listSortedCorrectly)
+            Assert.fail("testInsertByRating failed :" + "list should be sorted by rating!");
+    }
+
+    @Test
     public void testInsertByRating() {
 
         RatingsList movieRatingsList = initalizeListWithValues(MOVIES, RATINGS);

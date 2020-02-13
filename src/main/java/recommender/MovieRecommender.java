@@ -1,6 +1,10 @@
 package recommender;
 
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
+import java.io.BufferedReader;
 
 /** recommender.MovieRecommender. A class that is responsible for:
  - Reading movie and ratings data from the file and loading it in the data structure recommender.UsersList.
@@ -38,7 +42,25 @@ public class MovieRecommender {
      *
      */
     private void loadMovies(String movieFilename) {
-        // FILL IN CODE
+        try (BufferedReader br = new BufferedReader(new FileReader(movieFilename))){
+            String line;
+            br.readLine();
+            while ((line = br.readLine()) != null){
+                String[] movieInfo;
+                String movieName;
+                if (line.contains(",\"")){
+                    movieInfo = line.split(",\"");
+                    movieName = movieInfo[1].split("\",")[0];
+                }else{
+                    movieInfo = line.split(",");
+                    movieName = movieInfo[1];
+                }
+                movieMap.put(Integer.parseInt(movieInfo[0]), movieName);
+            }
+
+        }catch (IOException e){
+            System.out.println("Could not read from the file: " + movieFilename);
+        }
 
     }
 
@@ -47,7 +69,17 @@ public class MovieRecommender {
      * @param ratingsFilename name of the file that contains ratings
      */
     private void loadRatings(String ratingsFilename) {
-        // FILL IN CODE
+        try(BufferedReader br = new BufferedReader(new FileReader(ratingsFilename))){
+            String line;
+            br.readLine();
+            while ((line = br.readLine()) != null){
+                String[] ratingsInfo = line.split(",");
+                usersData.insert(Integer.parseInt(ratingsInfo[0]),Integer.parseInt(ratingsInfo[1]), Double.parseDouble(ratingsInfo[2]));
+            }
+        }
+        catch (IOException e){
+            System.out.println("Could not read from the file: " + ratingsFilename);
+        }
 
     }
 
@@ -63,6 +95,39 @@ public class MovieRecommender {
      *                 Format of the file: one movie title per each line
      */
     public void findRecommendations(int userid, int num, String filename) {
+
+        UserNode simUser = usersData.findMostSimilarUser(userid);
+        int[] favMovies = simUser.getFavoriteMovies(num);
+        UserNode myUser = usersData.get(userid);
+        FileWriter favWriter;
+        try {
+            favWriter = new FileWriter(filename);
+
+        } catch (IOException e) {
+            return;
+        }
+
+        for (int i = 0; i < num; i++) {
+            int currentId = favMovies[i];
+
+            if (myUser.getUsersRating(currentId) == 0){
+                if (simUser.getUsersRating(currentId) == 5){
+                    String movieName = movieMap.get(currentId);
+                    try {
+                        favWriter.write(movieName + "\n");
+
+                    }
+                    catch (IOException e){
+                        return;
+                    }
+                }
+            }
+        }
+        try {
+            favWriter.close();
+        }catch (IOException e){
+
+        }
 
         // compute similarity between userid and all the other users
         // find the most similar user and recommend movies that the most similar
