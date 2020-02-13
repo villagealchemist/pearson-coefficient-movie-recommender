@@ -1,5 +1,7 @@
 package recommender;
 
+import java.util.Iterator;
+
 /** recommender.UserNode. The class represents a node in the recommender.UsersList.
  *  Stores a userId, a list of ratings of type MovieRatingsList,
  *  and a reference to the "next" user in the list.
@@ -72,9 +74,30 @@ public class UserNode {
      * @return array containing movie ids this user rated the highest
      */
     public int[] getFavoriteMovies(int n) {
-        // FILL IN CODE
+        RatingsList nBest = movieRatings.getNBestRankedMovies(n);
+        RatingNode head = nBest.iterator().next();
+        RatingNode current = head;
+        int[] favMovies = new int[n];
 
-        return null; // don't forget to change
+        while (nBest.iterator().hasNext()){
+            head.setNext(nBest.iterator().next());
+        }
+
+        for (int i = 0; i < n; i++){
+            favMovies[i] = (current.getMovieId());
+
+        }
+
+        /* RatingNode current = nBest.head;
+        int[] favorites = new int[n];
+
+        for (int i = 0; i < n; i++){
+            favorites[n] = current.getMovieId();
+            current = current.next();
+        }
+        return favorites; */  //doesn't work beacause head is private
+
+        return favMovies; // don't forget to change
     }
 
     /**
