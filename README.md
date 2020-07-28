@@ -1,2 +1,2 @@
-# Project 1 Part 2: Movie Recommender
-For this part of the project, you need to fill in code in classes UserNode, UsersList and MovieRecommender. Please see the description on Canvas. You would also need to replace the provided RatingsList class with the one you wrote for project 1 part 1.
+# Movie Recommender using Pearson Correlation Coefficient
+Uses real data to compare similarity between two users based on the movies they like, and the movies they dislike. After determining how similar users are using the Pearson Correlation Coefficient the program reccomends movies to the current user based on what similar users have enjoyed. The program does the same with reccomending movies for the current user to avoid, based on movies disliked by similar users. 
